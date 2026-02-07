@@ -1,0 +1,73 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Breadcrumbs from '../../components/Breadcrumbs.astro';
+
+const instructions = await getCollection('instructions');
+
+// Get makes with counts
+const makeMap = new Map<string, { count: number; models: Set<string> }>();
+instructions.forEach(i => {
+  const parts = i.slug.split('/');
+  const make = parts[0];
+  const model = parts[1];
+  
+  if (!makeMap.has(make)) {
+    makeMap.set(make, { count: 0, models: new Set() });
+  }
+  const entry = makeMap.get(make)!;
+  entry.count++;
+  entry.models.add(model);
+});
+
+const makes = Array.from(makeMap.entries())
+  .map(([slug, data]) => ({
+    slug,
+    name: slug.charAt(0).toUpperCase() + slug.slice(1),
+    count: data.count,
+    modelCount: data.models.size
+  }))
+  .sort((a, b) => a.name.localeCompare(b.name));
+
+const breadcrumbs = [
+  { label: 'Home', href: '/' },
+  { label: 'All Makes' },
+];
+
+const title = "All Car Makes - Key Fob Programming Instructions";
+const description = `Free key fob programming instructions for ${makes.length} car manufacturers. Browse by make to find your vehicle.`;
+---
+
+<BaseLayout title={title} description={description}>
+  <Breadcrumbs items={breadcrumbs} />
+
+  <div class="max-w-6xl mx-auto px-4 py-8">
+    <div class="mb-8">
+      <h1 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+        All Car Makes
+      </h1>
+      <p class="text-lg text-gray-600">
+        {makes.length} manufacturers • {instructions.length} total guides
+      </p>
+    </div>
+
+    <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+      {makes.map(make => (
+        <a 
+          href={`/${make.slug}/`}
+          class="bg-white rounded-xl p-5 shadow-sm hover:shadow-md transition group text-center"
+        >
+          <div class="w-14 h-14 mx-auto mb-3 bg-gray-100 rounded-full flex items-center justify-center text-2xl font-bold text-primary group-hover:bg-accent group-hover:text-white transition">
+            {make.name[0]}
+          </div>
+          <h2 class="font-semibold text-gray-900 group-hover:text-primary transition">
+            {make.name}
+          </h2>
+          <p class="text-sm text-gray-500 mt-1">
+            {make.modelCount} models • {make.count} guides
+          </p>
+        </a>
+      ))}
+    </div>
+  </div>
+</BaseLayout>

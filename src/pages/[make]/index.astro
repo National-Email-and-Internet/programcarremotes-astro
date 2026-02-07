@@ -1,0 +1,96 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Breadcrumbs from '../../components/Breadcrumbs.astro';
+
+export async function getStaticPaths() {
+  const instructions = await getCollection('instructions');
+  
+  // Get unique makes
+  const makes = [...new Set(instructions.map(i => i.slug.split('/')[0]))];
+  
+  return makes.map(make => {
+    // Get all instructions for this make
+    const makeInstructions = instructions.filter(i => i.slug.split('/')[0] === make);
+    
+    // Get unique models with their instruction counts
+    const modelMap = new Map<string, { count: number; years: string[] }>();
+    makeInstructions.forEach(i => {
+      const parts = i.slug.split('/');
+      const model = parts[1];
+      const year = parts[2];
+      if (!modelMap.has(model)) {
+        modelMap.set(model, { count: 0, years: [] });
+      }
+      const entry = modelMap.get(model)!;
+      entry.count++;
+      entry.years.push(year);
+    });
+    
+    const models = Array.from(modelMap.entries()).map(([slug, data]) => ({
+      slug,
+      name: slug.split('-').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' '),
+      count: data.count,
+      years: data.years.sort()
+    })).sort((a, b) => a.name.localeCompare(b.name));
+    
+    return {
+      params: { make },
+      props: { 
+        make,
+        makeName: make.charAt(0).toUpperCase() + make.slice(1),
+        models,
+        totalInstructions: makeInstructions.length
+      },
+    };
+  });
+}
+
+const { make, makeName, models, totalInstructions } = Astro.props;
+
+const breadcrumbs = [
+  { label: 'Home', href: '/' },
+  { label: makeName },
+];
+
+const title = `${makeName} Key Fob Programming Instructions`;
+const description = `Free ${makeName} key fob programming instructions. ${totalInstructions} guides for ${models.length} models.`;
+---
+
+<BaseLayout title={title} description={description}>
+  <Breadcrumbs items={breadcrumbs} />
+
+  <div class="max-w-6xl mx-auto px-4 py-8">
+    <div class="mb-8">
+      <h1 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+        {makeName} Key Fob Programming Instructions
+      </h1>
+      <p class="text-lg text-gray-600">
+        {totalInstructions} free programming guides for {models.length} {makeName} models.
+      </p>
+    </div>
+
+    <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
+      {models.map(model => (
+        <a 
+          href={`/${make}/${model.slug}/`}
+          class="bg-white rounded-xl p-5 shadow-sm hover:shadow-md transition group"
+        >
+          <div class="flex items-start justify-between">
+            <div>
+              <h2 class="font-semibold text-gray-900 group-hover:text-primary transition">
+                {model.name}
+              </h2>
+              <p class="text-sm text-gray-500 mt-1">
+                {model.count} guide{model.count > 1 ? 's' : ''} • {model.years[0]}-{model.years[model.years.length - 1]}
+              </p>
+            </div>
+            <svg class="w-5 h-5 text-gray-400 group-hover:text-primary transition" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+            </svg>
+          </div>
+        </a>
+      ))}
+    </div>
+  </div>
+</BaseLayout>

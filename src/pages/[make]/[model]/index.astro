@@ -1,0 +1,99 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import Breadcrumbs from '../../../components/Breadcrumbs.astro';
+
+export async function getStaticPaths() {
+  const instructions = await getCollection('instructions');
+  
+  // Get unique make/model combinations
+  const modelPaths = new Map<string, { make: string; model: string; instructions: typeof instructions }>();
+  
+  instructions.forEach(i => {
+    const parts = i.slug.split('/');
+    const make = parts[0];
+    const model = parts[1];
+    const key = `${make}/${model}`;
+    
+    if (!modelPaths.has(key)) {
+      modelPaths.set(key, { make, model, instructions: [] });
+    }
+    modelPaths.get(key)!.instructions.push(i);
+  });
+  
+  return Array.from(modelPaths.values()).map(({ make, model, instructions }) => {
+    const years = instructions
+      .map(i => ({
+        year: i.slug.split('/')[2],
+        title: i.data.title,
+        slug: i.slug
+      }))
+      .sort((a, b) => a.year.localeCompare(b.year));
+    
+    return {
+      params: { make, model },
+      props: {
+        make,
+        model,
+        makeName: make.charAt(0).toUpperCase() + make.slice(1),
+        modelName: model.split('-').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' '),
+        years,
+      },
+    };
+  });
+}
+
+const { make, model, makeName, modelName, years } = Astro.props;
+
+const breadcrumbs = [
+  { label: 'Home', href: '/' },
+  { label: makeName, href: `/${make}/` },
+  { label: modelName },
+];
+
+const title = `${makeName} ${modelName} Key Fob Programming Instructions`;
+const description = `Free key fob programming instructions for ${makeName} ${modelName}. ${years.length} year guides available.`;
+---
+
+<BaseLayout title={title} description={description}>
+  <Breadcrumbs items={breadcrumbs} />
+
+  <div class="max-w-4xl mx-auto px-4 py-8">
+    <div class="mb-8">
+      <h1 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+        {makeName} {modelName} Key Fob Programming
+      </h1>
+      <p class="text-lg text-gray-600">
+        Select your year to find the programming instructions for your {makeName} {modelName}.
+      </p>
+    </div>
+
+    <div class="bg-white rounded-xl shadow-sm overflow-hidden">
+      <div class="divide-y">
+        {years.map(({ year, title, slug }) => (
+          <a 
+            href={`/${slug}/`}
+            class="flex items-center justify-between p-4 hover:bg-gray-50 transition group"
+          >
+            <div>
+              <span class="font-semibold text-gray-900 group-hover:text-primary transition">
+                {year}
+              </span>
+              <span class="text-gray-500 ml-2">—</span>
+              <span class="text-gray-600 ml-2">{title}</span>
+            </div>
+            <svg class="w-5 h-5 text-gray-400 group-hover:text-primary transition" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+            </svg>
+          </a>
+        ))}
+      </div>
+    </div>
+
+    <div class="mt-8 p-4 bg-blue-50 rounded-xl">
+      <p class="text-sm text-blue-800">
+        <strong>Tip:</strong> Most key fob programming takes less than 5 minutes. Make sure you have a fresh battery in your new fob before starting.
+      </p>
+    </div>
+  </div>
+</BaseLayout>

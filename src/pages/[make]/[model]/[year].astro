@@ -1,0 +1,133 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import Breadcrumbs from '../../../components/Breadcrumbs.astro';
+
+export async function getStaticPaths() {
+  const instructions = await getCollection('instructions');
+  
+  return instructions.map((entry) => {
+    const pathParts = entry.slug.split('/');
+    const make = pathParts[0];
+    const model = pathParts[1];
+    const year = pathParts[2];
+    
+    return {
+      params: { make, model, year },
+      props: { entry },
+    };
+  });
+}
+
+const { entry } = Astro.props;
+const { Content } = await entry.render();
+const { title, description, make, model, years, difficulty, timeMinutes, author, pubDate } = entry.data;
+
+const breadcrumbs = [
+  { label: 'Home', href: '/' },
+  { label: make, href: `/${Astro.params.make}/` },
+  { label: model, href: `/${Astro.params.make}/${Astro.params.model}/` },
+  { label: years },
+];
+
+const difficultyColors: Record<string, string> = {
+  easy: 'text-accent',
+  medium: 'text-yellow-600',
+  hard: 'text-red-600',
+};
+---
+
+<BaseLayout title={title} description={description}>
+  <Breadcrumbs items={breadcrumbs} />
+
+  <div class="max-w-4xl mx-auto px-4 py-8">
+    <!-- Header -->
+    <div class="mb-8">
+      <div class="flex items-center gap-3 mb-4">
+        <span class="bg-blue-100 text-blue-700 text-xs font-semibold px-3 py-1 rounded-full">{make}</span>
+        <span class="bg-gray-100 text-gray-600 text-xs font-semibold px-3 py-1 rounded-full">{model}</span>
+      </div>
+      
+      <h1 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4">{title}</h1>
+      
+      <div class="flex flex-wrap items-center gap-4 text-sm text-gray-500">
+        <div class="flex items-center gap-2">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+          </svg>
+          <span>~{timeMinutes} minutes</span>
+        </div>
+        <div class="flex items-center gap-2">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
+          </svg>
+          <span class={`${difficultyColors[difficulty] || ''} font-medium capitalize`}>{difficulty}</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Action Bar -->
+    <div class="bg-white rounded-xl p-4 shadow-sm mb-8 flex items-center justify-between no-print">
+      <button onclick="window.print()" class="flex items-center gap-2 px-4 py-2 bg-gray-100 hover:bg-gray-200 rounded-lg text-sm font-medium text-gray-700 transition">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z" />
+        </svg>
+        Print Instructions
+      </button>
+      <div class="text-sm text-gray-500">
+        <span class="font-medium text-accent">$100+</span> saved vs locksmith
+      </div>
+    </div>
+
+    <div class="grid lg:grid-cols-3 gap-8">
+      <!-- Main Content -->
+      <div class="lg:col-span-2">
+        <div class="bg-white rounded-xl p-6 shadow-sm">
+          <div class="prose prose-gray max-w-none">
+            <Content />
+          </div>
+        </div>
+      </div>
+
+      <!-- Sidebar -->
+      <div class="lg:col-span-1 no-print">
+        <div class="bg-white rounded-xl p-5 shadow-sm sticky top-4">
+          <h3 class="font-bold text-gray-900 mb-4">Quick Info</h3>
+          <dl class="space-y-3 text-sm">
+            <div class="flex justify-between">
+              <dt class="text-gray-500">Vehicle</dt>
+              <dd class="font-medium text-gray-800">{make} {model}</dd>
+            </div>
+            <div class="flex justify-between">
+              <dt class="text-gray-500">Year</dt>
+              <dd class="font-medium text-gray-800">{years}</dd>
+            </div>
+            <div class="flex justify-between">
+              <dt class="text-gray-500">Time</dt>
+              <dd class="font-medium text-gray-800">~{timeMinutes} min</dd>
+            </div>
+            <div class="flex justify-between">
+              <dt class="text-gray-500">Difficulty</dt>
+              <dd class={`${difficultyColors[difficulty] || ''} font-medium capitalize`}>{difficulty}</dd>
+            </div>
+          </dl>
+          <hr class="my-4" />
+          <p class="text-xs text-gray-500">Written by {author}</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- JSON-LD Schema -->
+  <Fragment slot="head">
+    <script type="application/ld+json" set:html={JSON.stringify({
+      "@context": "https://schema.org",
+      "@type": "HowTo",
+      "name": title,
+      "description": description,
+      "totalTime": `PT${timeMinutes}M`,
+      "tool": ["Key fob", "Vehicle key"],
+      "supply": ["New key fob with fresh battery"]
+    })} />
+  </Fragment>
+</BaseLayout>
