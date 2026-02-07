@@ -1,0 +1,55 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Breadcrumbs from '../components/Breadcrumbs.astro';
+
+const breadcrumbs = [
+  { label: 'Home', href: '/' },
+  { label: 'Disclaimer' },
+];
+---
+
+<BaseLayout title="Disclaimer" description="Legal disclaimer for Program Car Remotes.">
+  <Breadcrumbs items={breadcrumbs} />
+  
+  <div class="max-w-3xl mx-auto px-4 py-12">
+    <h1 class="text-3xl font-bold text-gray-900 mb-6">Disclaimer</h1>
+    
+    <div class="prose prose-lg">
+      <h2>General Information</h2>
+      <p>
+        The information provided on Program Car Remotes is for general informational purposes only. 
+        All information on the site is provided in good faith, however we make no representation or 
+        warranty of any kind, express or implied, regarding the accuracy, adequacy, validity, 
+        reliability, availability, or completeness of any information on the site.
+      </p>
+      
+      <h2>Professional Advice</h2>
+      <p>
+        The site cannot and does not contain automotive professional advice. The programming 
+        instructions are provided for general informational purposes only and are not a substitute 
+        for professional advice. Accordingly, before taking any actions based upon such information, 
+        we encourage you to consult with appropriate professionals.
+      </p>
+      
+      <h2>Not Responsible for Errors</h2>
+      <p>
+        While we strive to provide accurate programming instructions, vehicle manufacturers may 
+        change procedures without notice. We are not responsible for any errors or omissions, or 
+        for the results obtained from the use of this information.
+      </p>
+      
+      <h2>Vehicle Damage</h2>
+      <p>
+        We are not responsible for any damage to your vehicle, key fob, or any other property 
+        that may result from following instructions on this site. If you are unsure about any 
+        procedure, please consult a professional locksmith or your vehicle dealer.
+      </p>
+      
+      <h2>External Links</h2>
+      <p>
+        The site may contain links to external websites. We do not warrant, endorse, or assume 
+        responsibility for the content or practices of any third-party sites.
+      </p>
+    </div>
+  </div>
+</BaseLayout>

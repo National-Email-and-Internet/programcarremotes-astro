@@ -1,0 +1,58 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Breadcrumbs from '../components/Breadcrumbs.astro';
+
+const breadcrumbs = [
+  { label: 'Home', href: '/' },
+  { label: 'Troubleshooting' },
+];
+---
+
+<BaseLayout title="Troubleshooting" description="Common key fob programming problems and solutions.">
+  <Breadcrumbs items={breadcrumbs} />
+  
+  <div class="max-w-3xl mx-auto px-4 py-12">
+    <h1 class="text-3xl font-bold text-gray-900 mb-6">Key Fob Programming Troubleshooting</h1>
+    
+    <div class="prose prose-lg">
+      <p>
+        Having trouble programming your key fob? Here are solutions to the most common problems.
+      </p>
+      
+      <h2>Remote Won't Enter Programming Mode</h2>
+      <ul>
+        <li><strong>Check your timing</strong> - Most procedures require precise timing between steps</li>
+        <li><strong>Door position</strong> - Make sure doors are in the correct position (open/closed) as specified</li>
+        <li><strong>Key position</strong> - Ensure you're turning the key fully to each position</li>
+        <li><strong>Try again</strong> - It often takes 2-3 attempts to get the timing right</li>
+      </ul>
+      
+      <h2>Remote Programmed But Doesn't Work</h2>
+      <ul>
+        <li><strong>Battery</strong> - Replace the remote battery with a fresh one</li>
+        <li><strong>Compatibility</strong> - Verify the remote is compatible with your exact vehicle year/model</li>
+        <li><strong>Range</strong> - Test while standing next to the vehicle</li>
+        <li><strong>Re-program</strong> - Try the programming procedure again from the beginning</li>
+      </ul>
+      
+      <h2>Vehicle Doesn't Respond During Programming</h2>
+      <ul>
+        <li><strong>Battery voltage</strong> - Low car battery can prevent programming</li>
+        <li><strong>Existing remotes</strong> - Some vehicles require an existing working remote</li>
+        <li><strong>Professional required</strong> - Some vehicles need dealer/locksmith equipment</li>
+      </ul>
+      
+      <h2>Maximum Remotes Reached</h2>
+      <p>
+        Most vehicles can store 2-4 remotes. Programming a new remote may erase old ones. 
+        Program all remotes you want to use in the same session.
+      </p>
+      
+      <h2>Still Having Issues?</h2>
+      <p>
+        If self-programming isn't working, you may need professional assistance. 
+        <a href="/find-a-locksmith/">Find a locksmith</a> in your area.
+      </p>
+    </div>
+  </div>
+</BaseLayout>
