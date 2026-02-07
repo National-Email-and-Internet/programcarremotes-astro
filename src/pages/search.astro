@@ -1,0 +1,168 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Breadcrumbs from '../components/Breadcrumbs.astro';
+
+// Get query params
+const url = new URL(Astro.request.url);
+const year = url.searchParams.get('year') || '';
+const make = url.searchParams.get('make') || '';
+const model = url.searchParams.get('model') || '';
+
+// Get all instructions
+const instructions = await getCollection('instructions');
+
+// Filter by make
+let results = instructions;
+if (make) {
+  results = results.filter(i => {
+    const parts = i.slug.split('/');
+    return parts[0].toLowerCase() === make.toLowerCase();
+  });
+}
+
+// Filter by model (if not "all")
+if (model && model !== 'all') {
+  results = results.filter(i => {
+    const parts = i.slug.split('/');
+    return parts[1].toLowerCase() === model.toLowerCase();
+  });
+}
+
+// Filter by year
+if (year) {
+  results = results.filter(i => {
+    const parts = i.slug.split('/');
+    const pageYear = parts[2];
+    return pageYear === year || pageYear === 'unknown';
+  });
+}
+
+// Check for exact match - redirect if found
+if (year && make && model && model !== 'all' && results.length === 1) {
+  return Astro.redirect(`/${results[0].slug}/`);
+}
+
+// If searching for a year+make combo, redirect to make page
+if (make && (!model || model === 'all')) {
+  return Astro.redirect(`/${make.toLowerCase()}/`);
+}
+
+// Group results by model
+const modelMap = new Map<string, typeof results>();
+results.forEach(r => {
+  const parts = r.slug.split('/');
+  const modelSlug = parts[1];
+  if (!modelMap.has(modelSlug)) {
+    modelMap.set(modelSlug, []);
+  }
+  modelMap.get(modelSlug)!.push(r);
+});
+
+const makeName = make ? make.charAt(0).toUpperCase() + make.slice(1) : '';
+
+const breadcrumbs = [
+  { label: 'Home', href: '/' },
+  { label: 'Search Results' },
+];
+---
+
+<BaseLayout title="Search Results" description="Search results for key fob programming instructions.">
+  <Breadcrumbs items={breadcrumbs} />
+  
+  <div class="max-w-3xl mx-auto px-4 py-12">
+    
+    {results.length === 0 ? (
+      <!-- No Results -->
+      <div class="text-center">
+        <div class="w-20 h-20 bg-yellow-100 rounded-full flex items-center justify-center mx-auto mb-6">
+          <svg class="w-10 h-10 text-yellow-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M12 20a8 8 0 100-16 8 8 0 000 16z"/>
+          </svg>
+        </div>
+        
+        <h1 class="text-3xl font-bold text-gray-900 mb-4">No Instructions Found</h1>
+        
+        <p class="text-lg text-gray-600 mb-8">
+          We don't have programming instructions for 
+          {year && <strong>{year} </strong>}
+          {makeName && <strong>{makeName} </strong>}
+          {model && model !== 'all' && <strong>{model}</strong>}
+          yet.
+        </p>
+        
+        <div class="bg-white rounded-xl shadow-sm p-8 mb-8 text-left">
+          <h2 class="text-xl font-semibold text-gray-900 mb-4">What You Can Do</h2>
+          <ul class="space-y-3">
+            <li class="flex items-start">
+              <svg class="w-5 h-5 text-green-500 mr-3 mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+              </svg>
+              <span class="text-gray-700"><strong class="text-gray-900">Check nearby years</strong> — similar years often use the same procedure</span>
+            </li>
+            <li class="flex items-start">
+              <svg class="w-5 h-5 text-green-500 mr-3 mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+              </svg>
+              <span class="text-gray-700"><strong class="text-gray-900">Browse all {makeName || 'makes'}</strong> — we may have other models</span>
+            </li>
+            <li class="flex items-start">
+              <svg class="w-5 h-5 text-green-500 mr-3 mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+              </svg>
+              <span class="text-gray-700"><strong class="text-gray-900">Contact a locksmith</strong> — some vehicles need professional programming</span>
+            </li>
+          </ul>
+        </div>
+        
+        <div class="flex flex-col sm:flex-row gap-4 justify-center">
+          {make && (
+            <a href={`/${make.toLowerCase()}/`} class="inline-block bg-primary text-white px-6 py-3 rounded-lg font-semibold hover:bg-accent transition">
+              Browse {makeName} Models
+            </a>
+          )}
+          <a href="/makes/" class="inline-block border border-gray-300 px-6 py-3 rounded-lg font-semibold hover:bg-gray-50 transition">
+            Browse All Makes
+          </a>
+          <a href="/find-a-locksmith/" class="inline-block border border-gray-300 px-6 py-3 rounded-lg font-semibold hover:bg-gray-50 transition">
+            Find a Locksmith
+          </a>
+        </div>
+      </div>
+    ) : (
+      <!-- Has Results -->
+      <div>
+        <h1 class="text-3xl font-bold text-gray-900 mb-2">
+          {year && `${year} `}{makeName} Instructions
+        </h1>
+        <p class="text-gray-600 mb-8">{results.length} guide{results.length !== 1 ? 's' : ''} found</p>
+        
+        <div class="space-y-6">
+          {Array.from(modelMap.entries()).map(([modelSlug, items]) => {
+            const modelName = items[0].data.model || modelSlug;
+            const years = items.map(i => i.slug.split('/')[2]).sort();
+            
+            return (
+              <div class="bg-white rounded-xl shadow-sm p-6">
+                <h2 class="text-xl font-semibold text-gray-900 mb-4">{modelName}</h2>
+                <div class="flex flex-wrap gap-2">
+                  {items.sort((a, b) => a.slug.localeCompare(b.slug)).map(item => {
+                    const itemYear = item.slug.split('/')[2];
+                    return (
+                      <a 
+                        href={`/${item.slug}/`}
+                        class="px-4 py-2 bg-gray-100 hover:bg-primary hover:text-white rounded-lg text-sm font-medium transition"
+                      >
+                        {itemYear === 'unknown' ? 'All Years' : itemYear}
+                      </a>
+                    );
+                  })}
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      </div>
+    )}
+  </div>
+</BaseLayout>
