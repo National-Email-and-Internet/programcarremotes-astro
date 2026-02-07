@@ -69,10 +69,11 @@
 ## 📋 TODO
 
 ### Phase 4: Core Templates
-- [ ] Homepage (search + brand grid)
-- [ ] Brand page template (`/[make]/`)
-- [ ] Model page template (`/[make]/[model]/`)
-- [ ] Instruction page template (`/[make]/[model]/[years]/`)
+- [x] Homepage (search + brand grid)
+- [x] Brand page template (`/[make]/`)
+- [x] Model page template (`/[make]/[model]/`)
+- [x] Instruction page template (`/[make]/[model]/[year]/`)
+- [x] All Makes page (`/makes/`)
 - [ ] About page
 - [ ] Troubleshooting hub page
 - [ ] Search results page
@@ -88,13 +89,13 @@
 - [ ] Related models sidebar
 
 ### Phase 6: SEO & Schema
-- [ ] HowTo schema (JSON-LD) for instruction pages
-- [ ] BreadcrumbList schema
+- [x] HowTo schema (JSON-LD) for instruction pages
+- [x] BreadcrumbList schema (via Breadcrumbs component)
 - [ ] FAQPage schema
 - [ ] Sitemap generation
 - [ ] robots.txt
-- [ ] Meta tags (OG, Twitter cards)
-- [ ] Canonical URLs
+- [x] Meta tags (OG, Twitter cards)
+- [x] Canonical URLs
 
 ### Phase 7: Search & CMS
 - [ ] Integrate Pagefind for client-side search
@@ -103,10 +104,10 @@
 - [ ] Test CMS preview
 
 ### Phase 8: Content Migration
-- [ ] Import all instruction posts
+- [x] Import all instruction posts (800+ via REST API)
 - [ ] Verify content accuracy
 - [ ] Optimize images
-- [ ] Set up 301 redirects from old URLs
+- [x] Set up 301 redirects from old URLs (817 redirects in public/_redirects)
 
 ### Phase 9: Testing & Launch
 - [ ] Mobile responsive testing
@@ -118,9 +119,10 @@
 
 ### Phase 10: GA4 & SEO Sign-Off (MANDATORY)
 **Migration NOT complete until all boxes checked:**
-- [ ] GA4 tracking verified in Real-Time report
+- [x] GA4 tracking added (GT-KD78PHP in Analytics.astro)
+- [ ] GA4 tracking verified in Real-Time report (after deploy)
 - [ ] Sitemap submitted to Google Search Console
-- [ ] All original URLs preserved or 301 redirected
+- [x] All original URLs preserved or 301 redirected (817 redirects)
 - [ ] Lighthouse SEO score 90+
 - [ ] Request indexing of key pages
 
