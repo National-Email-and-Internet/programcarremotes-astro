@@ -1,0 +1,31 @@
+backend:
+  name: github
+  repo: National-Email-and-Internet/programcarremotes-astro
+  branch: main
+
+media_folder: "public/images"
+public_folder: "/images"
+
+collections:
+  - name: "instructions"
+    label: "Programming Instructions"
+    folder: "src/content/instructions"
+    create: true
+    nested:
+      depth: 3
+    slug: "{{make}}/{{model}}/{{yearStart}}"
+    fields:
+      - {label: "Title", name: "title", widget: "string"}
+      - {label: "Description", name: "description", widget: "text"}
+      - {label: "Make", name: "make", widget: "string"}
+      - {label: "Model", name: "model", widget: "string"}
+      - {label: "Years", name: "years", widget: "string"}
+      - {label: "Year Start", name: "yearStart", widget: "number"}
+      - {label: "Year End", name: "yearEnd", widget: "number"}
+      - {label: "Difficulty", name: "difficulty", widget: "select", options: ["easy", "medium", "hard"]}
+      - {label: "Time (minutes)", name: "timeMinutes", widget: "number"}
+      - {label: "Requires Existing Key", name: "requiresExistingKey", widget: "boolean"}
+      - {label: "Requires Locksmith", name: "requiresLocksmith", widget: "boolean"}
+      - {label: "Author", name: "author", widget: "string", default: "The Remote Guy"}
+      - {label: "Publish Date", name: "pubDate", widget: "datetime"}
+      - {label: "Body", name: "body", widget: "markdown"}
