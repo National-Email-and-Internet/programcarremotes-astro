@@ -1,0 +1,51 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Breadcrumbs from '../components/Breadcrumbs.astro';
+
+const breadcrumbs = [
+  { label: 'Home', href: '/' },
+  { label: 'About' },
+];
+---
+
+<BaseLayout title="About" description="About Program Car Remotes - free key fob programming instructions for hundreds of vehicles.">
+  <Breadcrumbs items={breadcrumbs} />
+  
+  <div class="max-w-3xl mx-auto px-4 py-12">
+    <h1 class="text-3xl font-bold text-gray-900 mb-6">About Program Car Remotes</h1>
+    
+    <div class="prose prose-lg">
+      <p>
+        Program Car Remotes provides <strong>free, step-by-step key fob programming instructions</strong> 
+        for hundreds of vehicle makes and models. Our mission is simple: help you save money by 
+        programming your own car remote instead of paying $100+ at a locksmith or dealership.
+      </p>
+      
+      <h2>Why We Exist</h2>
+      <p>
+        Many car key fobs can be programmed at home in just a few minutes using a simple sequence 
+        of steps. Dealerships and locksmiths charge premium prices for this service, but with the 
+        right instructions, you can do it yourself for free.
+      </p>
+      
+      <h2>Our Instructions</h2>
+      <p>
+        We've compiled programming instructions for over 800 vehicle year/make/model combinations. 
+        Each guide includes:
+      </p>
+      <ul>
+        <li>Step-by-step instructions</li>
+        <li>Estimated time to complete</li>
+        <li>Difficulty rating</li>
+        <li>Tips for success</li>
+      </ul>
+      
+      <h2>Disclaimer</h2>
+      <p>
+        These instructions are provided for informational purposes. Some vehicles require 
+        professional programming equipment. Always verify compatibility with your specific 
+        vehicle before purchasing replacement remotes.
+      </p>
+    </div>
+  </div>
+</BaseLayout>
