@@ -21,7 +21,7 @@ export async function getStaticPaths() {
 
 const { entry } = Astro.props;
 const { Content } = await entry.render();
-const { title, description, make, model, years, difficulty, timeMinutes, author, pubDate } = entry.data;
+const { title, description, make, model, years, difficulty, timeMinutes, author, pubDate, requiresExistingKey, requiresLocksmith } = entry.data;
 
 const breadcrumbs = [
   { label: 'Home', href: '/' },
@@ -30,11 +30,13 @@ const breadcrumbs = [
   { label: years },
 ];
 
-const difficultyColors: Record<string, string> = {
-  easy: 'text-accent',
-  medium: 'text-yellow-600',
-  hard: 'text-red-600',
+const difficultyConfig: Record<string, { color: string; bg: string; label: string }> = {
+  easy: { color: 'text-green-700', bg: 'bg-green-100', label: 'Easy' },
+  medium: { color: 'text-yellow-700', bg: 'bg-yellow-100', label: 'Medium' },
+  hard: { color: 'text-red-700', bg: 'bg-red-100', label: 'Hard' },
 };
+
+const diffStyle = difficultyConfig[difficulty] || difficultyConfig.easy;
 ---
 
 <BaseLayout title={title} description={description}>
@@ -43,76 +45,143 @@ const difficultyColors: Record<string, string> = {
   <div class="max-w-4xl mx-auto px-4 py-8">
     <!-- Header -->
     <div class="mb-8">
-      <div class="flex items-center gap-3 mb-4">
-        <span class="bg-blue-100 text-blue-700 text-xs font-semibold px-3 py-1 rounded-full">{make}</span>
-        <span class="bg-gray-100 text-gray-600 text-xs font-semibold px-3 py-1 rounded-full">{model}</span>
-      </div>
-      
       <h1 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4">{title}</h1>
       
-      <div class="flex flex-wrap items-center gap-4 text-sm text-gray-500">
-        <div class="flex items-center gap-2">
+      <div class="flex flex-wrap items-center gap-3">
+        <span class={`${diffStyle.bg} ${diffStyle.color} text-sm font-semibold px-3 py-1 rounded-full`}>
+          {diffStyle.label}
+        </span>
+        <span class="bg-gray-100 text-gray-600 text-sm font-medium px-3 py-1 rounded-full flex items-center gap-1">
           <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
           </svg>
-          <span>~{timeMinutes} minutes</span>
-        </div>
-        <div class="flex items-center gap-2">
-          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
-          </svg>
-          <span class={`${difficultyColors[difficulty] || ''} font-medium capitalize`}>{difficulty}</span>
-        </div>
+          ~{timeMinutes} min
+        </span>
+        <span class="bg-green-100 text-green-700 text-sm font-semibold px-3 py-1 rounded-full">
+          Save $100+
+        </span>
       </div>
     </div>
 
+    <!-- Warnings/Notes -->
+    {(requiresExistingKey || requiresLocksmith) && (
+      <div class="mb-6 space-y-3">
+        {requiresExistingKey && (
+          <div class="bg-yellow-50 border-l-4 border-yellow-400 p-4 rounded-r-lg">
+            <div class="flex items-start">
+              <svg class="w-5 h-5 text-yellow-600 mr-3 mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                <path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd"/>
+              </svg>
+              <p class="text-yellow-800 text-sm"><strong>Note:</strong> This procedure requires at least one working remote.</p>
+            </div>
+          </div>
+        )}
+        {requiresLocksmith && (
+          <div class="bg-red-50 border-l-4 border-red-400 p-4 rounded-r-lg">
+            <div class="flex items-start">
+              <svg class="w-5 h-5 text-red-600 mr-3 mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"/>
+              </svg>
+              <p class="text-red-800 text-sm"><strong>Professional Required:</strong> This vehicle may require locksmith equipment. <a href="/find-a-locksmith/" class="underline hover:no-underline">Find a locksmith</a>.</p>
+            </div>
+          </div>
+        )}
+      </div>
+    )}
+
     <!-- Action Bar -->
-    <div class="bg-white rounded-xl p-4 shadow-sm mb-8 flex items-center justify-between no-print">
+    <div class="bg-white rounded-xl p-4 shadow-sm mb-6 flex items-center justify-between no-print">
       <button onclick="window.print()" class="flex items-center gap-2 px-4 py-2 bg-gray-100 hover:bg-gray-200 rounded-lg text-sm font-medium text-gray-700 transition">
         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z" />
         </svg>
         Print Instructions
       </button>
-      <div class="text-sm text-gray-500">
-        <span class="font-medium text-accent">$100+</span> saved vs locksmith
-      </div>
     </div>
 
     <div class="grid lg:grid-cols-3 gap-8">
       <!-- Main Content -->
       <div class="lg:col-span-2">
-        <div class="bg-white rounded-xl p-6 shadow-sm">
-          <div class="prose prose-gray max-w-none">
-            <Content />
+        <div class="bg-white rounded-xl shadow-sm overflow-hidden">
+          <!-- Content Header -->
+          <div class="bg-primary text-white px-6 py-4">
+            <h2 class="text-lg font-semibold flex items-center gap-2">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"/>
+              </svg>
+              Programming Instructions
+            </h2>
           </div>
+          
+          <!-- Instructions Content -->
+          <div class="p-6">
+            <div class="instruction-content">
+              <Content />
+            </div>
+          </div>
+          
+          <!-- Content Footer -->
+          <div class="bg-gray-50 px-6 py-4 border-t">
+            <p class="text-sm text-gray-500">
+              💡 <strong>Tip:</strong> If the procedure doesn't work the first time, try again. Timing can be tricky!
+            </p>
+          </div>
+        </div>
+        
+        <!-- Troubleshooting Link -->
+        <div class="mt-6 bg-blue-50 rounded-xl p-6 no-print">
+          <h3 class="font-semibold text-gray-900 mb-2">Having trouble?</h3>
+          <p class="text-gray-600 text-sm mb-4">
+            Check our troubleshooting guide for common issues and solutions.
+          </p>
+          <a href="/troubleshooting/" class="text-primary hover:underline font-medium text-sm">
+            View Troubleshooting Guide →
+          </a>
         </div>
       </div>
 
       <!-- Sidebar -->
       <div class="lg:col-span-1 no-print">
-        <div class="bg-white rounded-xl p-5 shadow-sm sticky top-4">
-          <h3 class="font-bold text-gray-900 mb-4">Quick Info</h3>
-          <dl class="space-y-3 text-sm">
-            <div class="flex justify-between">
-              <dt class="text-gray-500">Vehicle</dt>
-              <dd class="font-medium text-gray-800">{make} {model}</dd>
-            </div>
-            <div class="flex justify-between">
-              <dt class="text-gray-500">Year</dt>
-              <dd class="font-medium text-gray-800">{years}</dd>
-            </div>
-            <div class="flex justify-between">
-              <dt class="text-gray-500">Time</dt>
-              <dd class="font-medium text-gray-800">~{timeMinutes} min</dd>
-            </div>
-            <div class="flex justify-between">
-              <dt class="text-gray-500">Difficulty</dt>
-              <dd class={`${difficultyColors[difficulty] || ''} font-medium capitalize`}>{difficulty}</dd>
-            </div>
-          </dl>
-          <hr class="my-4" />
-          <p class="text-xs text-gray-500">Written by {author}</p>
+        <div class="bg-white rounded-xl shadow-sm sticky top-4">
+          <div class="bg-gray-50 px-5 py-4 border-b rounded-t-xl">
+            <h3 class="font-bold text-gray-900">Quick Info</h3>
+          </div>
+          <div class="p-5">
+            <dl class="space-y-4 text-sm">
+              <div class="flex justify-between items-center">
+                <dt class="text-gray-500">Vehicle</dt>
+                <dd class="font-medium text-gray-800">{make} {model}</dd>
+              </div>
+              <div class="flex justify-between items-center">
+                <dt class="text-gray-500">Year</dt>
+                <dd class="font-medium text-gray-800">{years}</dd>
+              </div>
+              <div class="flex justify-between items-center">
+                <dt class="text-gray-500">Time</dt>
+                <dd class="font-medium text-gray-800">~{timeMinutes} min</dd>
+              </div>
+              <div class="flex justify-between items-center">
+                <dt class="text-gray-500">Difficulty</dt>
+                <dd class={`${diffStyle.color} font-medium`}>{diffStyle.label}</dd>
+              </div>
+            </dl>
+          </div>
+          <div class="px-5 py-4 border-t bg-green-50 rounded-b-xl">
+            <p class="text-sm text-green-800">
+              <strong>You save:</strong> $100+ vs locksmith
+            </p>
+          </div>
+        </div>
+        
+        <!-- Need Help Card -->
+        <div class="mt-4 bg-white rounded-xl shadow-sm p-5">
+          <h3 class="font-bold text-gray-900 mb-3">Need Professional Help?</h3>
+          <p class="text-gray-600 text-sm mb-4">
+            Some vehicles require special equipment.
+          </p>
+          <a href="/find-a-locksmith/" class="block text-center bg-primary text-white py-2 rounded-lg font-medium hover:bg-accent transition text-sm">
+            Find a Locksmith
+          </a>
         </div>
       </div>
     </div>
@@ -131,3 +200,56 @@ const difficultyColors: Record<string, string> = {
     })} />
   </Fragment>
 </BaseLayout>
+
+<style>
+  .instruction-content {
+    @apply text-gray-700 leading-relaxed;
+  }
+  
+  .instruction-content p {
+    @apply mb-4;
+  }
+  
+  .instruction-content p:first-child {
+    @apply text-lg font-medium text-gray-900;
+  }
+  
+  .instruction-content p:last-child {
+    @apply mb-0;
+  }
+  
+  .instruction-content strong,
+  .instruction-content b {
+    @apply text-gray-900 font-semibold;
+  }
+  
+  .instruction-content ul,
+  .instruction-content ol {
+    @apply mb-4 ml-6;
+  }
+  
+  .instruction-content ul {
+    @apply list-disc;
+  }
+  
+  .instruction-content ol {
+    @apply list-decimal;
+  }
+  
+  .instruction-content li {
+    @apply mb-2;
+  }
+  
+  .instruction-content h2,
+  .instruction-content h3 {
+    @apply font-bold text-gray-900 mt-6 mb-3;
+  }
+  
+  .instruction-content h2 {
+    @apply text-xl;
+  }
+  
+  .instruction-content h3 {
+    @apply text-lg;
+  }
+</style>
