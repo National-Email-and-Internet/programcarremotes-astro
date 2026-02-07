@@ -21,7 +21,7 @@ export async function getStaticPaths() {
 
 const { entry } = Astro.props;
 const { Content } = await entry.render();
-const { title, description, make, model, years, difficulty, timeMinutes, author, pubDate, requiresExistingKey, requiresLocksmith } = entry.data;
+const { title, description, make, model, years, difficulty, timeMinutes, author, pubDate } = entry.data;
 
 const breadcrumbs = [
   { label: 'Home', href: '/' },
@@ -30,10 +30,10 @@ const breadcrumbs = [
   { label: years },
 ];
 
-const difficultyConfig: Record<string, { color: string; bg: string; label: string }> = {
-  easy: { color: 'text-green-700', bg: 'bg-green-100', label: 'Easy' },
-  medium: { color: 'text-yellow-700', bg: 'bg-yellow-100', label: 'Medium' },
-  hard: { color: 'text-red-700', bg: 'bg-red-100', label: 'Hard' },
+const difficultyConfig: Record<string, { color: string; label: string }> = {
+  easy: { color: 'text-green-600', label: 'Easy' },
+  medium: { color: 'text-yellow-600', label: 'Medium' },
+  hard: { color: 'text-red-600', label: 'Hard' },
 };
 
 const diffStyle = difficultyConfig[difficulty] || difficultyConfig.easy;
@@ -44,59 +44,8 @@ const diffStyle = difficultyConfig[difficulty] || difficultyConfig.easy;
 
   <div class="max-w-4xl mx-auto px-4 py-8">
     <!-- Header -->
-    <div class="mb-8">
-      <h1 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4">{title}</h1>
-      
-      <div class="flex flex-wrap items-center gap-3">
-        <span class={`${diffStyle.bg} ${diffStyle.color} text-sm font-semibold px-3 py-1 rounded-full`}>
-          {diffStyle.label}
-        </span>
-        <span class="bg-gray-100 text-gray-600 text-sm font-medium px-3 py-1 rounded-full flex items-center gap-1">
-          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-          </svg>
-          ~{timeMinutes} min
-        </span>
-        <span class="bg-green-100 text-green-700 text-sm font-semibold px-3 py-1 rounded-full">
-          Save $100+
-        </span>
-      </div>
-    </div>
-
-    <!-- Warnings/Notes -->
-    {(requiresExistingKey || requiresLocksmith) && (
-      <div class="mb-6 space-y-3">
-        {requiresExistingKey && (
-          <div class="bg-yellow-50 border-l-4 border-yellow-400 p-4 rounded-r-lg">
-            <div class="flex items-start">
-              <svg class="w-5 h-5 text-yellow-600 mr-3 mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
-                <path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd"/>
-              </svg>
-              <p class="text-yellow-800 text-sm"><strong>Note:</strong> This procedure requires at least one working remote.</p>
-            </div>
-          </div>
-        )}
-        {requiresLocksmith && (
-          <div class="bg-red-50 border-l-4 border-red-400 p-4 rounded-r-lg">
-            <div class="flex items-start">
-              <svg class="w-5 h-5 text-red-600 mr-3 mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
-                <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"/>
-              </svg>
-              <p class="text-red-800 text-sm"><strong>Professional Required:</strong> This vehicle may require locksmith equipment. <a href="/find-a-locksmith/" class="underline hover:no-underline">Find a locksmith</a>.</p>
-            </div>
-          </div>
-        )}
-      </div>
-    )}
-
-    <!-- Action Bar -->
-    <div class="bg-white rounded-xl p-4 shadow-sm mb-6 flex items-center justify-between no-print">
-      <button onclick="window.print()" class="flex items-center gap-2 px-4 py-2 bg-gray-100 hover:bg-gray-200 rounded-lg text-sm font-medium text-gray-700 transition">
-        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z" />
-        </svg>
-        Print Instructions
-      </button>
+    <div class="mb-6">
+      <h1 class="text-3xl md:text-4xl font-bold text-gray-900">{title}</h1>
     </div>
 
     <div class="grid lg:grid-cols-3 gap-8">
@@ -115,16 +64,22 @@ const diffStyle = difficultyConfig[difficulty] || difficultyConfig.easy;
           
           <!-- Instructions Content -->
           <div class="p-6">
-            <div class="instruction-content">
+            <div class="instruction-content" id="instruction-content">
               <Content />
             </div>
           </div>
           
           <!-- Content Footer -->
-          <div class="bg-gray-50 px-6 py-4 border-t">
+          <div class="bg-gray-50 px-6 py-4 border-t flex items-center justify-between no-print">
             <p class="text-sm text-gray-500">
-              💡 <strong>Tip:</strong> If the procedure doesn't work the first time, try again. Timing can be tricky!
+              💡 <strong>Tip:</strong> If it doesn't work, try again — timing can be tricky!
             </p>
+            <button onclick="window.print()" class="flex items-center gap-2 px-4 py-2 bg-white border border-gray-200 hover:bg-gray-100 rounded-lg text-sm font-medium text-gray-700 transition">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z" />
+              </svg>
+              Print
+            </button>
           </div>
         </div>
         
@@ -201,63 +156,76 @@ const diffStyle = difficultyConfig[difficulty] || difficultyConfig.easy;
   </Fragment>
 </BaseLayout>
 
+<script>
+  // Convert paragraph text into numbered steps
+  document.addEventListener('DOMContentLoaded', () => {
+    const content = document.getElementById('instruction-content');
+    if (!content) return;
+    
+    const paragraphs = content.querySelectorAll('p');
+    let stepNumber = 1;
+    
+    paragraphs.forEach((p, index) => {
+      const text = p.textContent || '';
+      
+      // Skip intro paragraphs (short or contain "learn to", "programming", "note:", etc.)
+      const isIntro = text.length < 100 && (
+        text.toLowerCase().includes('learn to') ||
+        text.toLowerCase().includes('programming') ||
+        text.toLowerCase().includes('instructions') ||
+        text.toLowerCase().startsWith('note')
+      );
+      
+      if (isIntro && index === 0) {
+        // Style as intro
+        p.className = 'text-gray-600 mb-6 pb-4 border-b';
+        return;
+      }
+      
+      // Split by sentences that look like steps
+      const sentences = text.split(/\.(?=\s|$)/).filter(s => s.trim().length > 0);
+      
+      if (sentences.length > 1) {
+        // Create steps list
+        const ol = document.createElement('ol');
+        ol.className = 'space-y-4';
+        
+        sentences.forEach(sentence => {
+          const trimmed = sentence.trim();
+          if (trimmed.length < 5) return;
+          
+          const li = document.createElement('li');
+          li.className = 'flex gap-4';
+          li.innerHTML = `
+            <span class="flex-shrink-0 w-8 h-8 bg-primary text-white rounded-full flex items-center justify-center font-bold text-sm">${stepNumber}</span>
+            <span class="text-gray-700 pt-1">${trimmed}.</span>
+          `;
+          ol.appendChild(li);
+          stepNumber++;
+        });
+        
+        p.replaceWith(ol);
+      } else if (text.trim().length > 10) {
+        // Single sentence - still make it a step
+        const ol = document.createElement('ol');
+        ol.className = 'space-y-4';
+        const li = document.createElement('li');
+        li.className = 'flex gap-4';
+        li.innerHTML = `
+          <span class="flex-shrink-0 w-8 h-8 bg-primary text-white rounded-full flex items-center justify-center font-bold text-sm">${stepNumber}</span>
+          <span class="text-gray-700 pt-1">${text.trim()}</span>
+        `;
+        ol.appendChild(li);
+        p.replaceWith(ol);
+        stepNumber++;
+      }
+    });
+  });
+</script>
+
 <style>
   .instruction-content {
     color: #374151;
     line-height: 1.75;
-  }
-  
-  .instruction-content p {
-    margin-bottom: 1rem;
-  }
-  
-  .instruction-content p:first-child {
-    font-size: 1.125rem;
-    font-weight: 500;
-    color: #111827;
-  }
-  
-  .instruction-content p:last-child {
-    margin-bottom: 0;
-  }
-  
-  .instruction-content strong,
-  .instruction-content b {
-    color: #111827;
-    font-weight: 600;
-  }
-  
-  .instruction-content ul,
-  .instruction-content ol {
-    margin-bottom: 1rem;
-    margin-left: 1.5rem;
-  }
-  
-  .instruction-content ul {
-    list-style-type: disc;
-  }
-  
-  .instruction-content ol {
-    list-style-type: decimal;
-  }
-  
-  .instruction-content li {
-    margin-bottom: 0.5rem;
-  }
-  
-  .instruction-content h2,
-  .instruction-content h3 {
-    font-weight: 700;
-    color: #111827;
-    margin-top: 1.5rem;
-    margin-bottom: 0.75rem;
-  }
-  
-  .instruction-content h2 {
-    font-size: 1.25rem;
-  }
-  
-  .instruction-content h3 {
-    font-size: 1.125rem;
   }
 </style>
