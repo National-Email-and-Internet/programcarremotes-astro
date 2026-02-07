@@ -1,0 +1,22 @@
+---
+title: "2010 Jeep Grand Cherokee Remote Programming"
+description: "Programming Instructions: Note: This is the same for many Chrysler/Dodge/Jeep vehicles. Grab your working remote. Push the LOCK button five times, allowing exactly two seconds to pass between each pre"
+make: "Jeep"
+model: "Grand Cherokee"
+years: "unknown"
+yearStart: 2000
+yearEnd: 2000
+difficulty: "easy"
+timeMinutes: 5
+requiresExistingKey: true
+requiresLocksmith: false
+author: "The Remote Guy"
+pubDate: "2011-01-23"
+oldUrl: "https://programcarremotes.com/jeep/grand-cherokee/201-jeep-grand-cherokee-remote-programming-2/"
+---
+
+**Programming Instructions: Note: This is the same for many Chrysler/Dodge/Jeep vehicles.**
+
+Grab your working remote. Push the LOCK button five times, allowing exactly two seconds to pass between each press of the LOCK button. Insert the ignition key and turn it to RUN. Push and hold UNLOCK on the working remote for 6 seconds. Push and hold PANIC for one second while continuing to hold UNLOCK. Release both buttons at the same time.
+
+Push any button on the remote to program it. Then push any button on the remote that was already programmed. It has to be reprogrammed. The remote is now programmed to the vehicle. Turn the key to OFF.
