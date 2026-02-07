@@ -1,0 +1,127 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import SearchBox from '../components/SearchBox.astro';
+import BrandGrid from '../components/BrandGrid.astro';
+
+const title = "Free Key Fob Programming Instructions";
+const description = "Skip the $100+ locksmith fee. Find step-by-step instructions to program your car's key fob yourself. Free DIY guides for all makes and models.";
+
+const stats = [
+  { value: '500+', label: 'Vehicle Models' },
+  { value: '100%', label: 'Free Instructions' },
+  { value: '5 min', label: 'Average Time' },
+  { value: '$100+', label: 'Saved per Fob' },
+];
+
+const popularSearches = [
+  { make: 'Ford', model: 'F-150', years: '2015-2024', guides: 12, color: 'blue' },
+  { make: 'Honda', model: 'Civic', years: '2006-2024', guides: 15, color: 'red' },
+  { make: 'Toyota', model: 'Camry', years: '2007-2024', guides: 14, color: 'gray' },
+  { make: 'Chevrolet', model: 'Silverado', years: '2007-2024', guides: 11, color: 'yellow' },
+  { make: 'Jeep', model: 'Wrangler', years: '2007-2024', guides: 10, color: 'green' },
+  { make: 'Nissan', model: 'Altima', years: '2007-2024', guides: 13, color: 'purple' },
+];
+
+const steps = [
+  { 
+    number: 1, 
+    title: 'Find Your Vehicle', 
+    description: 'Search by year, make, and model to find your exact instructions.' 
+  },
+  { 
+    number: 2, 
+    title: 'Follow the Steps', 
+    description: 'Simple, numbered instructions you can follow in your garage.' 
+  },
+  { 
+    number: 3, 
+    title: 'Done!', 
+    description: "Your key fob is programmed. You just saved $100+." 
+  },
+];
+---
+
+<BaseLayout title={title} description={description}>
+  
+  <!-- Hero Section -->
+  <section class="bg-primary text-white pb-16 pt-12">
+    <div class="max-w-4xl mx-auto px-4 text-center">
+      <h1 class="text-3xl md:text-5xl font-bold mb-4">
+        Program Your Key Fob <span class="text-accent">For Free</span>
+      </h1>
+      <p class="text-blue-200 text-lg mb-8 max-w-2xl mx-auto">
+        Skip the $100+ locksmith fee. Find step-by-step instructions for your exact vehicle.
+      </p>
+      
+      <SearchBox />
+    </div>
+  </section>
+
+  <!-- Trust Bar -->
+  <section class="bg-white border-b">
+    <div class="max-w-6xl mx-auto px-4 py-6">
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
+        {stats.map(stat => (
+          <div>
+            <div class="text-2xl font-bold text-primary">{stat.value}</div>
+            <div class="text-sm text-gray-500">{stat.label}</div>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- Browse by Make -->
+  <section class="py-12">
+    <div class="max-w-6xl mx-auto px-4">
+      <h2 class="text-2xl font-bold text-gray-800 mb-2 text-center">Browse by Make</h2>
+      <p class="text-gray-500 text-center mb-8">Select your vehicle manufacturer</p>
+      
+      <BrandGrid />
+    </div>
+  </section>
+
+  <!-- How It Works -->
+  <section class="py-12 bg-white">
+    <div class="max-w-4xl mx-auto px-4">
+      <h2 class="text-2xl font-bold text-gray-800 mb-8 text-center">How It Works</h2>
+      
+      <div class="grid md:grid-cols-3 gap-8">
+        {steps.map(step => (
+          <div class="text-center">
+            <div class="w-16 h-16 bg-accent/10 rounded-2xl flex items-center justify-center mx-auto mb-4">
+              <span class="text-2xl font-bold text-accent">{step.number}</span>
+            </div>
+            <h3 class="font-semibold text-gray-800 mb-2">{step.title}</h3>
+            <p class="text-gray-500 text-sm">{step.description}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- Popular Searches -->
+  <section class="py-12">
+    <div class="max-w-6xl mx-auto px-4">
+      <h2 class="text-2xl font-bold text-gray-800 mb-6 text-center">Popular Searches</h2>
+      
+      <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
+        {popularSearches.map(item => (
+          <a 
+            href={`/${item.make.toLowerCase()}/${item.model.toLowerCase().replace(' ', '-')}/`}
+            class="bg-white rounded-xl p-4 shadow-sm hover:shadow-md transition flex items-center gap-4"
+          >
+            <div class={`w-12 h-12 bg-${item.color}-100 rounded-lg flex items-center justify-center text-${item.color}-600 font-bold`}>
+              {item.make[0]}
+            </div>
+            <div>
+              <div class="font-medium text-gray-800">{item.make} {item.model}</div>
+              <div class="text-sm text-gray-500">{item.years} • {item.guides} guides</div>
+            </div>
+          </a>
+        ))}
+      </div>
+    </div>
+  </section>
+
+</BaseLayout>

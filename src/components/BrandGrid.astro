@@ -1,0 +1,73 @@
+---
+// Brand grid showing all car manufacturers
+
+const brands = [
+  { name: 'Acura', slug: 'acura' },
+  { name: 'Audi', slug: 'audi' },
+  { name: 'BMW', slug: 'bmw' },
+  { name: 'Buick', slug: 'buick' },
+  { name: 'Cadillac', slug: 'cadillac' },
+  { name: 'Chevrolet', slug: 'chevrolet' },
+  { name: 'Chrysler', slug: 'chrysler' },
+  { name: 'Dodge', slug: 'dodge' },
+  { name: 'Ford', slug: 'ford' },
+  { name: 'GMC', slug: 'gmc' },
+  { name: 'Honda', slug: 'honda' },
+  { name: 'Hyundai', slug: 'hyundai' },
+  { name: 'Infiniti', slug: 'infiniti' },
+  { name: 'Isuzu', slug: 'isuzu' },
+  { name: 'Jaguar', slug: 'jaguar' },
+  { name: 'Jeep', slug: 'jeep' },
+  { name: 'Kia', slug: 'kia' },
+  { name: 'Lexus', slug: 'lexus' },
+  { name: 'Lincoln', slug: 'lincoln' },
+  { name: 'Mazda', slug: 'mazda' },
+  { name: 'Mercury', slug: 'mercury' },
+  { name: 'Mitsubishi', slug: 'mitsubishi' },
+  { name: 'Nissan', slug: 'nissan' },
+  { name: 'Oldsmobile', slug: 'oldsmobile' },
+  { name: 'Plymouth', slug: 'plymouth' },
+  { name: 'Pontiac', slug: 'pontiac' },
+  { name: 'Ram', slug: 'ram' },
+  { name: 'Saturn', slug: 'saturn' },
+  { name: 'Subaru', slug: 'subaru' },
+  { name: 'Suzuki', slug: 'suzuki' },
+  { name: 'Toyota', slug: 'toyota' },
+  { name: 'Volkswagen', slug: 'volkswagen' },
+  { name: 'Volvo', slug: 'volvo' },
+];
+
+interface Props {
+  limit?: number;
+  showViewAll?: boolean;
+}
+
+const { limit, showViewAll = true } = Astro.props;
+const displayBrands = limit ? brands.slice(0, limit) : brands;
+---
+
+<div class="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-8 gap-4">
+  {displayBrands.map(brand => (
+    <a 
+      href={`/${brand.slug}/`}
+      class="bg-white rounded-xl p-4 shadow-sm hover:shadow-md hover:scale-105 transition text-center group"
+    >
+      <div class="w-12 h-12 mx-auto mb-2 bg-gray-100 rounded-full flex items-center justify-center text-xl font-bold text-primary group-hover:bg-accent group-hover:text-white transition">
+        {brand.name[0]}
+      </div>
+      <div class="text-sm font-medium text-gray-700 truncate">{brand.name}</div>
+    </a>
+  ))}
+  
+  {showViewAll && limit && brands.length > limit && (
+    <a 
+      href="/makes/"
+      class="bg-primary rounded-xl p-4 shadow-sm hover:shadow-md hover:scale-105 transition text-center"
+    >
+      <div class="w-12 h-12 mx-auto mb-2 bg-white/20 rounded-full flex items-center justify-center text-xl font-bold text-white">
+        +{brands.length - limit}
+      </div>
+      <div class="text-sm font-medium text-white">View All</div>
+    </a>
+  )}
+</div>

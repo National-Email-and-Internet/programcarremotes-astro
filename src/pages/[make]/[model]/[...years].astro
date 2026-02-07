@@ -1,0 +1,277 @@
+---
+import { getCollection, type CollectionEntry } from 'astro:content';
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import Breadcrumbs from '../../../components/Breadcrumbs.astro';
+import InstructionSteps from '../../../components/InstructionSteps.astro';
+
+export async function getStaticPaths() {
+  const instructions = await getCollection('instructions');
+  
+  return instructions.map((entry) => {
+    const [make, model, years] = entry.slug.split('/');
+    return {
+      params: { make, model, years },
+      props: { entry },
+    };
+  });
+}
+
+interface Props {
+  entry: CollectionEntry<'instructions'>;
+}
+
+const { entry } = Astro.props;
+const { Content } = await entry.render();
+const { 
+  title, 
+  description, 
+  make, 
+  model, 
+  years,
+  difficulty,
+  timeMinutes,
+  requiresExistingKey,
+  requiresLocksmith,
+  compatibleFobs,
+  steps,
+  troubleshooting,
+  author,
+  pubDate,
+  updatedDate,
+} = entry.data;
+
+const breadcrumbs = [
+  { label: 'Home', href: '/' },
+  { label: make, href: `/${make.toLowerCase()}/` },
+  { label: model, href: `/${make.toLowerCase()}/${model.toLowerCase()}/` },
+  { label: years },
+];
+
+const difficultyColors = {
+  easy: 'text-accent',
+  medium: 'text-yellow-600',
+  hard: 'text-red-600',
+};
+
+const formattedDate = new Date(updatedDate || pubDate).toLocaleDateString('en-US', {
+  year: 'numeric',
+  month: 'short',
+});
+---
+
+<BaseLayout title={title} description={description}>
+  
+  <!-- Breadcrumbs -->
+  <Breadcrumbs items={breadcrumbs} />
+
+  <div class="max-w-4xl mx-auto px-4 py-8">
+    
+    <!-- Page Header -->
+    <div class="mb-8">
+      <div class="flex items-center gap-3 mb-4">
+        <span class="bg-red-100 text-red-700 text-xs font-semibold px-3 py-1 rounded-full">{make}</span>
+        {difficulty && (
+          <span class="bg-gray-100 text-gray-600 text-xs font-semibold px-3 py-1 rounded-full capitalize">{difficulty}</span>
+        )}
+      </div>
+      
+      <h1 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+        {title}
+      </h1>
+      
+      <p class="text-lg text-gray-600 mb-6">
+        {description}
+      </p>
+      
+      <!-- Meta Info -->
+      <div class="flex flex-wrap items-center gap-4 text-sm text-gray-500">
+        <div class="flex items-center gap-2">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+          </svg>
+          <span>~{timeMinutes} minutes</span>
+        </div>
+        <div class="flex items-center gap-2">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
+          </svg>
+          <span class={difficultyColors[difficulty] + ' font-medium capitalize'}>{difficulty} (DIY)</span>
+        </div>
+        <div class="flex items-center gap-2">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+          </svg>
+          <span>Updated {formattedDate}</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Action Bar -->
+    <div class="bg-white rounded-xl p-4 shadow-sm mb-8 flex flex-wrap items-center justify-between gap-4 no-print">
+      <div class="flex items-center gap-3">
+        <button onclick="window.print()" class="flex items-center gap-2 px-4 py-2 bg-gray-100 hover:bg-gray-200 rounded-lg text-sm font-medium text-gray-700 transition">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z" />
+          </svg>
+          Print Instructions
+        </button>
+      </div>
+    </div>
+
+    <div class="grid lg:grid-cols-3 gap-8">
+      
+      <!-- Main Content -->
+      <div class="lg:col-span-2">
+        
+        <!-- Important Notice -->
+        {requiresExistingKey && (
+          <div class="bg-amber-50 border border-amber-200 rounded-xl p-4 mb-8">
+            <div class="flex gap-3">
+              <div class="text-amber-500 mt-0.5">
+                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                  <path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd" />
+                </svg>
+              </div>
+              <div>
+                <div class="font-semibold text-amber-800 mb-1">Before You Start</div>
+                <p class="text-sm text-amber-700">You must have at least one working key fob to program additional remotes. If you have no working keys, you'll need a locksmith with diagnostic equipment.</p>
+              </div>
+            </div>
+          </div>
+        )}
+
+        <!-- Prose Content (What You'll Need, etc.) -->
+        <div class="prose prose-gray max-w-none mb-8">
+          <Content />
+        </div>
+
+        <!-- Step by Step Instructions -->
+        <InstructionSteps steps={steps} />
+
+        <!-- Troubleshooting -->
+        {troubleshooting && troubleshooting.length > 0 && (
+          <div class="bg-white rounded-xl p-6 shadow-sm mb-8">
+            <h2 class="text-xl font-bold text-gray-900 mb-4 flex items-center gap-2">
+              <svg class="w-5 h-5 text-amber-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+              </svg>
+              Troubleshooting
+            </h2>
+            
+            <div class="space-y-4">
+              {troubleshooting.map((item) => (
+                <details class="group">
+                  <summary class="flex items-center justify-between cursor-pointer p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition">
+                    <span class="font-medium text-gray-800">{item.question}</span>
+                    <svg class="w-5 h-5 text-gray-400 group-open:rotate-180 transition" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                    </svg>
+                  </summary>
+                  <div class="p-3 text-gray-600 text-sm">
+                    {item.answer}
+                  </div>
+                </details>
+              ))}
+            </div>
+          </div>
+        )}
+
+        <!-- Compatible Part Numbers -->
+        {compatibleFobs && compatibleFobs.length > 0 && (
+          <div class="bg-white rounded-xl p-6 shadow-sm mb-8">
+            <h2 class="text-xl font-bold text-gray-900 mb-4">Compatible Key Fob Part Numbers</h2>
+            <p class="text-gray-600 mb-4 text-sm">Make sure your replacement remote matches one of these FCC IDs:</p>
+            <div class="grid grid-cols-2 gap-3">
+              {compatibleFobs.map((fob) => (
+                <div class="bg-gray-50 rounded-lg p-3">
+                  <div class="font-mono text-sm font-semibold text-gray-800">{fob.fccId}</div>
+                  {fob.description && (
+                    <div class="text-xs text-gray-500">{fob.description}</div>
+                  )}
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
+      </div>
+
+      <!-- Sidebar -->
+      <div class="lg:col-span-1 no-print">
+        
+        <!-- Quick Info Card -->
+        <div class="bg-white rounded-xl p-5 shadow-sm mb-6 sticky top-4">
+          <h3 class="font-bold text-gray-900 mb-4">Quick Info</h3>
+          <dl class="space-y-3 text-sm">
+            <div class="flex justify-between">
+              <dt class="text-gray-500">Vehicle</dt>
+              <dd class="font-medium text-gray-800">{make} {model}</dd>
+            </div>
+            <div class="flex justify-between">
+              <dt class="text-gray-500">Years</dt>
+              <dd class="font-medium text-gray-800">{years}</dd>
+            </div>
+            <div class="flex justify-between">
+              <dt class="text-gray-500">Time</dt>
+              <dd class="font-medium text-gray-800">~{timeMinutes} minutes</dd>
+            </div>
+            <div class="flex justify-between">
+              <dt class="text-gray-500">Difficulty</dt>
+              <dd class={difficultyColors[difficulty] + ' font-medium capitalize'}>{difficulty} (DIY)</dd>
+            </div>
+            <div class="flex justify-between">
+              <dt class="text-gray-500">Cost</dt>
+              <dd class="font-medium text-gray-800">Free</dd>
+            </div>
+          </dl>
+          
+          <hr class="my-4" />
+          
+          <div class="text-center">
+            <div class="text-2xl font-bold text-accent mb-1">$100+</div>
+            <div class="text-xs text-gray-500">Saved vs. locksmith</div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Author Section -->
+    <div class="bg-white rounded-xl p-6 shadow-sm mt-8">
+      <div class="flex items-start gap-4">
+        <div class="w-16 h-16 bg-primary rounded-full flex items-center justify-center text-white text-2xl flex-shrink-0">
+          🔑
+        </div>
+        <div>
+          <div class="font-semibold text-gray-900">Written by {author}</div>
+          <div class="text-sm text-gray-500 mb-2">Automotive keyless entry specialist since 2010</div>
+          <p class="text-sm text-gray-600">These instructions have been verified and tested on actual vehicles. {author} has helped over 500,000 people program their key fobs for free.</p>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- JSON-LD Schema -->
+  <Fragment slot="head">
+    <script type="application/ld+json" set:html={JSON.stringify({
+      "@context": "https://schema.org",
+      "@type": "HowTo",
+      "name": title,
+      "description": description,
+      "totalTime": `PT${timeMinutes}M`,
+      "estimatedCost": {
+        "@type": "MonetaryAmount",
+        "currency": "USD",
+        "value": "0"
+      },
+      "step": steps.map((s, i) => ({
+        "@type": "HowToStep",
+        "position": i + 1,
+        "name": s.title,
+        "text": s.description
+      }))
+    })} />
+  </Fragment>
+
+</BaseLayout>

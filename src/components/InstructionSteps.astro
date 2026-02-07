@@ -1,0 +1,80 @@
+---
+interface Step {
+  step: number;
+  title: string;
+  description: string;
+  proTip?: string;
+  warning?: string;
+}
+
+interface Props {
+  steps: Step[];
+}
+
+const { steps } = Astro.props;
+---
+
+<div class="bg-white rounded-xl p-6 shadow-sm mb-8">
+  <h2 class="text-xl font-bold text-gray-900 mb-6 flex items-center gap-2">
+    <svg class="w-5 h-5 text-accent" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+    </svg>
+    Step-by-Step Instructions
+  </h2>
+  
+  <ol class="space-y-6">
+    {steps.map((item, index) => {
+      const isLast = index >= steps.length - 2;
+      const circleColor = isLast ? 'bg-accent' : 'bg-primary';
+      
+      return (
+        <li class="flex gap-4">
+          <div class={`w-10 h-10 ${circleColor} text-white rounded-full flex items-center justify-center font-bold flex-shrink-0`}>
+            {item.step}
+          </div>
+          <div class="pt-1.5 flex-grow">
+            <div class="font-semibold text-gray-900 mb-1">{item.title}</div>
+            <p class="text-gray-600">{item.description}</p>
+            
+            {item.proTip && (
+              <div class="mt-2 bg-blue-50 border border-blue-200 rounded-lg p-3 text-sm text-blue-800">
+                💡 <strong>Pro Tip:</strong> {item.proTip}
+              </div>
+            )}
+            
+            {item.warning && (
+              <div class="mt-2 bg-amber-50 border border-amber-200 rounded-lg p-3 text-sm text-amber-800">
+                ⚠️ <strong>Important:</strong> {item.warning}
+              </div>
+            )}
+          </div>
+        </li>
+      );
+    })}
+  </ol>
+</div>
+
+<!-- Success Section -->
+<div class="bg-green-50 border border-green-200 rounded-xl p-6 mb-8">
+  <h3 class="font-bold text-green-800 mb-3 flex items-center gap-2">
+    <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+      <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+    </svg>
+    Test Your Key Fobs
+  </h3>
+  <p class="text-green-700 mb-4">Exit the vehicle and close all doors. Test each programmed remote:</p>
+  <ul class="space-y-2 text-green-700">
+    <li class="flex items-center gap-2">
+      <span class="text-green-500">✓</span>
+      Press LOCK — doors should lock, lights should flash
+    </li>
+    <li class="flex items-center gap-2">
+      <span class="text-green-500">✓</span>
+      Press UNLOCK — doors should unlock
+    </li>
+    <li class="flex items-center gap-2">
+      <span class="text-green-500">✓</span>
+      Press PANIC — horn should sound (press again to stop)
+    </li>
+  </ul>
+</div>
