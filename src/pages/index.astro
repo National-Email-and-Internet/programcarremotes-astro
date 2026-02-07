@@ -14,12 +14,12 @@ const stats = [
 ];
 
 const popularSearches = [
-  { make: 'Ford', model: 'F-150', years: '2015-2024', guides: 12, color: 'blue' },
-  { make: 'Honda', model: 'Civic', years: '2006-2024', guides: 15, color: 'red' },
-  { make: 'Toyota', model: 'Camry', years: '2007-2024', guides: 14, color: 'gray' },
-  { make: 'Chevrolet', model: 'Silverado', years: '2007-2024', guides: 11, color: 'yellow' },
-  { make: 'Jeep', model: 'Wrangler', years: '2007-2024', guides: 10, color: 'green' },
-  { make: 'Nissan', model: 'Altima', years: '2007-2024', guides: 13, color: 'purple' },
+  { make: 'Ford', model: 'F-150/F-250/F-350', slug: 'ford/f150-f250-or-f350', years: '2004-2008', guides: 5, color: 'blue' },
+  { make: 'Honda', model: 'Civic', slug: 'honda/civic', years: '2001-2008', guides: 8, color: 'red' },
+  { make: 'Toyota', model: 'Camry', slug: 'toyota/camry', years: '1998-2008', guides: 10, color: 'gray' },
+  { make: 'Chevrolet', model: 'Silverado', slug: 'chevrolet/chevy-silverado', years: '2003-2006', guides: 4, color: 'yellow' },
+  { make: 'Jeep', model: 'Grand Cherokee', slug: 'jeep/grand-cherokee', years: '2000-2009', guides: 10, color: 'green' },
+  { make: 'Nissan', model: 'Altima', slug: 'nissan/altima', years: '2002-2006', guides: 5, color: 'purple' },
 ];
 
 const steps = [
@@ -108,7 +108,7 @@ const steps = [
       <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
         {popularSearches.map(item => (
           <a 
-            href={`/${item.make.toLowerCase()}/${item.model.toLowerCase().replace(' ', '-')}/`}
+            href={`/${item.slug}/`}
             class="bg-white rounded-xl p-4 shadow-sm hover:shadow-md transition flex items-center gap-4"
           >
             <div class={`w-12 h-12 bg-${item.color}-100 rounded-lg flex items-center justify-center text-${item.color}-600 font-bold`}>
