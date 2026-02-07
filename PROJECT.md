@@ -41,6 +41,21 @@
 
 ## 🔄 IN PROGRESS
 
+### Phase 2.5: GA4 & SEO Audit (REQUIRED BEFORE EXTRACTION)
+- [x] Extract GA4 Measurement ID from existing site
+  - **Tag ID: GT-KD78PHP** (Google Tag via Site Kit plugin)
+- [ ] Check for custom events/goals configured (need WP admin)
+- [ ] Verify site is in Google Search Console
+- [x] Note current sitemap URL: `/sitemap.xml` (old, from 2014!)
+- [ ] Screenshot current performance metrics (baseline)
+- [x] Record existing URL structure:
+  - Pattern: `/[make]/[model]/[year]-[make]-[model]-remote-programming/`
+  - Example: `/acura/rsx/2005-acura-rsx-remote-programming/`
+- [x] Document current meta tags:
+  - Title: "Program Car Remotes"
+  - Description: "How to program a key fob for your car."
+- [x] Document robots.txt (allows all except sitemap.xml and wp plugins)
+
 ### Phase 3: WordPress Content Extraction
 - [ ] Get WordPress credentials from Parker ⏳ (requested)
 - [ ] Fix WordPress critical error on category pages
@@ -95,12 +110,40 @@
 
 ### Phase 9: Testing & Launch
 - [ ] Mobile responsive testing
-- [ ] Lighthouse audit (target: 90+)
+- [ ] Lighthouse audit (target: 90+ SEO)
 - [ ] Cross-browser testing
 - [ ] Final SEO review
 - [ ] Deploy to production
 - [ ] Verify redirects working
-- [ ] Submit sitemap to Google Search Console
+
+### Phase 10: GA4 & SEO Sign-Off (MANDATORY)
+**Migration NOT complete until all boxes checked:**
+- [ ] GA4 tracking verified in Real-Time report
+- [ ] Sitemap submitted to Google Search Console
+- [ ] All original URLs preserved or 301 redirected
+- [ ] Lighthouse SEO score 90+
+- [ ] Request indexing of key pages
+
+---
+
+## ⚠️ URL Migration Notes
+
+**Old URL pattern:**
+```
+/[make]/[model]/[year]-[make]-[model]-remote-programming/
+```
+Example: `/acura/rsx/2005-acura-rsx-remote-programming/`
+
+**New URL pattern:**
+```
+/[make]/[model]/[year-range]/
+```
+Example: `/acura/rsx/2002-2006/`
+
+**Redirect strategy needed:**
+- Individual year URLs → consolidated year-range pages
+- All old URLs must 301 redirect to preserve SEO
+- May need to keep some as individual pages if instructions differ per year
 
 ---
 
