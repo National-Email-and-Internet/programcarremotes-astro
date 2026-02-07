@@ -14,73 +14,122 @@ const breadcrumbs = [
   <div class="max-w-3xl mx-auto px-4 py-12">
     <h1 class="text-3xl font-bold text-gray-900 mb-6">Find a Locksmith</h1>
     
-    <div class="prose prose-lg mb-8">
-      <p>
+    <div class="bg-white rounded-xl shadow-sm p-8 mb-6">
+      <p class="text-lg text-gray-700 leading-relaxed">
         Some vehicles require professional equipment for key fob programming. If self-programming 
         isn't working for your vehicle, a professional automotive locksmith can help.
       </p>
     </div>
     
-    <div class="bg-blue-50 rounded-xl p-6 mb-8">
-      <h2 class="text-xl font-semibold text-gray-900 mb-4">When to Call a Locksmith</h2>
-      <ul class="space-y-2 text-gray-700">
+    <div class="bg-blue-50 rounded-xl p-8 mb-6">
+      <h2 class="text-xl font-semibold text-gray-900 mb-4">🔑 When to Call a Locksmith</h2>
+      <ul class="space-y-3">
         <li class="flex items-start">
-          <svg class="w-5 h-5 text-blue-500 mr-2 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
+          <svg class="w-5 h-5 text-blue-500 mr-3 mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
             <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
           </svg>
-          Your vehicle requires a working remote to program new ones
+          <span class="text-gray-700">Your vehicle requires a working remote to program new ones</span>
         </li>
         <li class="flex items-start">
-          <svg class="w-5 h-5 text-blue-500 mr-2 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
+          <svg class="w-5 h-5 text-blue-500 mr-3 mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
             <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
           </svg>
-          Self-programming procedure isn't available for your vehicle
+          <span class="text-gray-700">Self-programming procedure isn't available for your vehicle</span>
         </li>
         <li class="flex items-start">
-          <svg class="w-5 h-5 text-blue-500 mr-2 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
+          <svg class="w-5 h-5 text-blue-500 mr-3 mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
             <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
           </svg>
-          You've tried self-programming multiple times without success
+          <span class="text-gray-700">You've tried self-programming multiple times without success</span>
         </li>
         <li class="flex items-start">
-          <svg class="w-5 h-5 text-blue-500 mr-2 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
+          <svg class="w-5 h-5 text-blue-500 mr-3 mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
             <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
           </svg>
-          You need a transponder key programmed (requires special equipment)
+          <span class="text-gray-700">You need a transponder key programmed (requires special equipment)</span>
         </li>
       </ul>
     </div>
     
-    <div class="bg-white rounded-xl shadow-sm p-8">
-      <h2 class="text-xl font-semibold text-gray-900 mb-4">Find Local Locksmiths</h2>
+    <div class="bg-white rounded-xl shadow-sm p-8 mb-6">
+      <h2 class="text-xl font-semibold text-gray-900 mb-6">🔍 Find Local Locksmiths</h2>
       
       <div class="space-y-4">
         <a href="https://www.google.com/search?q=automotive+locksmith+near+me" 
            target="_blank" rel="noopener"
-           class="flex items-center justify-between p-4 border border-gray-200 rounded-lg hover:bg-gray-50 transition">
-          <span class="font-medium">Search Google for locksmiths near you</span>
-          <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+           class="flex items-center justify-between p-5 bg-gray-50 border border-gray-200 rounded-xl hover:bg-gray-100 hover:border-gray-300 transition group">
+          <div>
+            <span class="font-semibold text-gray-900 group-hover:text-primary transition">Google Search</span>
+            <p class="text-sm text-gray-500 mt-1">Find locksmiths near your current location</p>
+          </div>
+          <svg class="w-5 h-5 text-gray-400 group-hover:text-primary transition" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/>
           </svg>
         </a>
         
         <a href="https://www.yelp.com/search?find_desc=automotive+locksmith" 
            target="_blank" rel="noopener"
-           class="flex items-center justify-between p-4 border border-gray-200 rounded-lg hover:bg-gray-50 transition">
-          <span class="font-medium">Find rated locksmiths on Yelp</span>
-          <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+           class="flex items-center justify-between p-5 bg-gray-50 border border-gray-200 rounded-xl hover:bg-gray-100 hover:border-gray-300 transition group">
+          <div>
+            <span class="font-semibold text-gray-900 group-hover:text-primary transition">Yelp</span>
+            <p class="text-sm text-gray-500 mt-1">Read reviews and compare ratings</p>
+          </div>
+          <svg class="w-5 h-5 text-gray-400 group-hover:text-primary transition" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/>
+          </svg>
+        </a>
+        
+        <a href="https://www.thumbtack.com/k/automotive-locksmith/near-me/" 
+           target="_blank" rel="noopener"
+           class="flex items-center justify-between p-5 bg-gray-50 border border-gray-200 rounded-xl hover:bg-gray-100 hover:border-gray-300 transition group">
+          <div>
+            <span class="font-semibold text-gray-900 group-hover:text-primary transition">Thumbtack</span>
+            <p class="text-sm text-gray-500 mt-1">Get quotes from local pros</p>
+          </div>
+          <svg class="w-5 h-5 text-gray-400 group-hover:text-primary transition" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/>
           </svg>
         </a>
       </div>
     </div>
     
-    <div class="mt-8 bg-yellow-50 rounded-xl p-6">
-      <h3 class="font-semibold text-gray-900 mb-2">💡 Tip: Get Multiple Quotes</h3>
-      <p class="text-gray-700">
-        Prices for key fob programming vary widely. Call 2-3 locksmiths for quotes before 
-        choosing. Mobile locksmiths are often cheaper than dealerships.
+    <div class="bg-yellow-50 rounded-xl p-8 mb-6">
+      <h2 class="text-xl font-semibold text-gray-900 mb-4">💡 Tip: Get Multiple Quotes</h2>
+      <p class="text-gray-700 leading-relaxed">
+        Prices for key fob programming vary widely — from $50 to $200+. Call 2-3 locksmiths 
+        for quotes before choosing. <strong class="text-gray-900">Mobile locksmiths are often 
+        cheaper than dealerships.</strong>
       </p>
+    </div>
+    
+    <div class="bg-white rounded-xl shadow-sm p-8">
+      <h2 class="text-xl font-semibold text-gray-900 mb-4">📋 What to Ask</h2>
+      <ul class="space-y-3">
+        <li class="flex items-start">
+          <svg class="w-5 h-5 text-green-500 mr-3 mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+          </svg>
+          <span class="text-gray-700"><strong class="text-gray-900">Total price</strong> — including service call fee</span>
+        </li>
+        <li class="flex items-start">
+          <svg class="w-5 h-5 text-green-500 mr-3 mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+          </svg>
+          <span class="text-gray-700"><strong class="text-gray-900">Remote included?</strong> — or do you need to provide one</span>
+        </li>
+        <li class="flex items-start">
+          <svg class="w-5 h-5 text-green-500 mr-3 mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+          </svg>
+          <span class="text-gray-700"><strong class="text-gray-900">Warranty</strong> — on the programming work</span>
+        </li>
+        <li class="flex items-start">
+          <svg class="w-5 h-5 text-green-500 mr-3 mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+          </svg>
+          <span class="text-gray-700"><strong class="text-gray-900">Timeline</strong> — same-day service available?</span>
+        </li>
+      </ul>
     </div>
   </div>
 </BaseLayout>
