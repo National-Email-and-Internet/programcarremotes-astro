@@ -1,0 +1,39 @@
+---
+interface Props {
+  pageId: string;
+  pageTitle?: string;
+}
+
+const { pageId, pageTitle } = Astro.props;
+const CUSDIS_HOST = "https://comments.natinternet.com";
+const APP_ID = "b9309279-ec0e-4a9c-a399-ded44e321924";
+---
+
+<section class="mt-12 pt-8 border-t border-gray-200">
+  <h2 class="text-2xl font-bold text-gray-900 mb-6">Comments</h2>
+  
+  <div id="cusdis_thread"
+    data-host={CUSDIS_HOST}
+    data-app-id={APP_ID}
+    data-page-id={pageId}
+    data-page-url={Astro.url.href}
+    data-page-title={pageTitle || pageId}
+  ></div>
+</section>
+
+<script is:inline>
+  window.CUSDIS_LOCALE = {
+    powered_by: 'Comments powered by Cusdis',
+    post_comment: 'Post Comment',
+    loading: 'Loading...',
+    email: 'Email (optional)',
+    nickname: 'Name',
+    reply: 'Reply',
+    mod_badge: 'Admin',
+    content: 'Comment',
+    comment: 'Comment',
+    sending: 'Sending...',
+    email_required: 'Email is required for replies',
+  };
+</script>
+<script is:inline src="https://comments.natinternet.com/js/cusdis.es.js" async defer></script>

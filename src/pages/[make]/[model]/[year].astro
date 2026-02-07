@@ -2,6 +2,7 @@
 import { getCollection } from 'astro:content';
 import BaseLayout from '../../../layouts/BaseLayout.astro';
 import Breadcrumbs from '../../../components/Breadcrumbs.astro';
+import Comments from '../../../components/Comments.astro';
 
 export async function getStaticPaths() {
   const instructions = await getCollection('instructions');
@@ -92,6 +93,11 @@ const diffStyle = difficultyConfig[difficulty] || difficultyConfig.easy;
           <a href="/troubleshooting/" class="text-primary hover:underline font-medium text-sm">
             View Troubleshooting Guide →
           </a>
+        </div>
+        
+        <!-- Comments -->
+        <div class="no-print">
+          <Comments pageId={entry.slug} pageTitle={title} />
         </div>
       </div>
 
