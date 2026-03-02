@@ -1,17 +1,5 @@
 ---
-interface Props {
-  pageId: string;
-  pageTitle?: string;
-  pageUrl?: string;
-}
-
-const { pageId, pageTitle, pageUrl } = Astro.props;
-const CUSDIS_HOST = "https://comments.natinternet.com";
-const APP_ID = "b9309279-ec0e-4a9c-a399-ded44e321924";
-const MOSPARO_HOST = "https://spam.natinternet.com";
-const MOSPARO_UUID = "6982d587-9875-4929-bd10-ba4d360df6fc";
-const MOSPARO_PUBLIC_KEY = "ufR7cYCMRPLAJNPB8ZLtYEjFrvd3Ysv0aQfpgxXuIzM";
-const fullUrl = pageUrl || Astro.url.href;
+const pageUrl = Astro.url.href;
 ---
 
 <section class="mt-16">
@@ -23,123 +11,20 @@ const fullUrl = pageUrl || Astro.url.href;
       Join the Discussion
     </h2>
     <p class="mb-6 opacity-80">Have a question or tip? Share it below!</p>
-    
-    <div id="cusdis_thread"
-      data-host={CUSDIS_HOST}
-      data-app-id={APP_ID}
-      data-page-id={pageId}
-      data-page-url={fullUrl}
-      data-page-title={pageTitle || pageId}
-      data-theme="light"
-    ></div>
 
-    <!-- Mosparo container for validation -->
-    <div id="mosparo-box" style="display:none;"></div>
+    <div id="remark42"></div>
   </div>
 </section>
 
-
-<script is:inline>
-  window.CUSDIS_LOCALE = {
-    powered_by: 'Comments',
-    post_comment: 'Post Comment',
-    loading: 'Loading...',
-    email: 'Email (optional)',
-    nickname: 'Name',
-    reply_placeholder: 'Write a comment...',
-    reply_btn: 'Reply',
-    sending: 'Sending...',
+<script define:vars={{ pageUrl }}>
+  var remark_config = {
+    host: "https://remark42.natinternet.com",
+    site_id: "programcarremotes",
+    url: pageUrl,
+    components: ["embed"],
+    max_shown_comments: 20,
+    theme: "light",
+    locale: "en",
   };
-  window.CUSDIS_PREVENT_INITIAL_RENDER = true;
 </script>
-
-<!-- Mosparo Resources -->
-<link href="https://spam.natinternet.com/resources/6982d587-9875-4929-bd10-ba4d360df6fc.css" rel="stylesheet">
-<script is:inline src="https://spam.natinternet.com/build/mosparo-frontend.js" defer></script>
-
-<!-- Cusdis SDK -->
-<script is:inline src="https://comments.natinternet.com/js/cusdis.umd.js" defer></script>
-
-<script is:inline>
-  let mosparoInstance = null;
-  
-  // Initialize Mosparo
-  function initMosparo() {
-    if (typeof mosparo !== 'undefined' && !mosparoInstance) {
-      mosparoInstance = new mosparo(
-        'mosparo-box',
-        'https://spam.natinternet.com',
-        '6982d587-9875-4929-bd10-ba4d360df6fc',
-        'ufR7cYCMRPLAJNPB8ZLtYEjFrvd3Ysv0aQfpgxXuIzM',
-        {
-          loadCssResource: false,
-          onCheckForm: function(valid) {
-            window._mosparoValid = valid;
-          }
-        }
-      );
-    }
-  }
-
-  // Watch for Cusdis form creation and attach spam protection
-  function attachSpamProtection() {
-    const observer = new MutationObserver(function(mutations) {
-      const form = document.querySelector('#cusdis_thread form');
-      if (form && !form.dataset.mosparoAttached) {
-        form.dataset.mosparoAttached = 'true';
-        
-        // Add Mosparo validation on submit
-        form.addEventListener('submit', function(e) {
-          if (!window._mosparoValid) {
-            if (mosparoInstance) {
-              mosparoInstance.checkForm();
-            }
-          }
-        });
-        
-        // Move mosparo box inside form
-        const mosparoBox = document.getElementById('mosparo-box');
-        if (mosparoBox) {
-          mosparoBox.style.display = 'block';
-          mosparoBox.style.marginTop = '10px';
-          const submitBtn = form.querySelector('button[type="submit"]');
-          if (submitBtn) {
-            submitBtn.parentNode.insertBefore(mosparoBox, submitBtn);
-          }
-        }
-        
-        observer.disconnect();
-      }
-    });
-    
-    const thread = document.getElementById('cusdis_thread');
-    if (thread) {
-      observer.observe(thread, {
-        childList: true,
-        subtree: true
-      });
-    }
-  }
-
-  // Initialize everything when DOM is ready
-  document.addEventListener('DOMContentLoaded', function() {
-    initMosparo();
-    attachSpamProtection();
-  });
-  
-  // Wait for Cusdis SDK to load (it has defer)
-  function initCusdis() {
-    if (window.renderCusdis) {
-      window.renderCusdis(document.getElementById('cusdis_thread'));
-    } else {
-      setTimeout(initCusdis, 100);
-    }
-  }
-  initCusdis();
-</script>
-
-<style>
-  #mosparo-box {
-    margin: 10px 0;
-  }
-</style>
+<script async src="https://remark42.natinternet.com/web/embed.js"></script>
