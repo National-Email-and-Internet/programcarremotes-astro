@@ -9,8 +9,8 @@ const { pageId, pageTitle, pageUrl } = Astro.props;
 const CUSDIS_HOST = "https://comments.natinternet.com";
 const APP_ID = "b9309279-ec0e-4a9c-a399-ded44e321924";
 const MOSPARO_HOST = "https://spam.natinternet.com";
-const MOSPARO_UUID = "497d62a6-36ff-4c7e-9609-d68e13cf4512";
-const MOSPARO_PUBLIC_KEY = "zRYQd4jzBrbixXk2kJfBPuAQpHQF_YQb6IvUqN-He74";
+const MOSPARO_UUID = "6982d587-9875-4929-bd10-ba4d360df6fc";
+const MOSPARO_PUBLIC_KEY = "ufR7cYCMRPLAJNPB8ZLtYEjFrvd3Ysv0aQfpgxXuIzM";
 const fullUrl = pageUrl || Astro.url.href;
 ---
 
@@ -54,7 +54,7 @@ const fullUrl = pageUrl || Astro.url.href;
 </script>
 
 <!-- Mosparo Resources -->
-<link href="https://spam.natinternet.com/resources/497d62a6-36ff-4c7e-9609-d68e13cf4512.css" rel="stylesheet">
+<link href="https://spam.natinternet.com/resources/6982d587-9875-4929-bd10-ba4d360df6fc.css" rel="stylesheet">
 <script is:inline src="https://spam.natinternet.com/build/mosparo-frontend.js" defer></script>
 
 <!-- Cusdis SDK -->
@@ -69,8 +69,8 @@ const fullUrl = pageUrl || Astro.url.href;
       mosparoInstance = new mosparo(
         'mosparo-box',
         'https://spam.natinternet.com',
-        '497d62a6-36ff-4c7e-9609-d68e13cf4512',
-        'zRYQd4jzBrbixXk2kJfBPuAQpHQF_YQb6IvUqN-He74',
+        '6982d587-9875-4929-bd10-ba4d360df6fc',
+        'ufR7cYCMRPLAJNPB8ZLtYEjFrvd3Ysv0aQfpgxXuIzM',
         {
           loadCssResource: false,
           onCheckForm: function(valid) {
